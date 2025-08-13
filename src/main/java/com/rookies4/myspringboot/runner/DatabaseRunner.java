@@ -12,7 +12,9 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 
 @Component
+//runner중에 우선순위를 높게 줬음
 @Order(1)
+//logger 객체 생성
 @Slf4j
 public class DatabaseRunner implements ApplicationRunner {
     @Autowired
