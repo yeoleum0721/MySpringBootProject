@@ -5,12 +5,14 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.DynamicUpdate;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name="customers")
 @Getter @Setter
+@DynamicUpdate
 public class Customer {
     //primary Key, PK값을 Persistence Provider가 결정해라
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
