@@ -19,10 +19,12 @@ public class Student {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "student_id")
     private Long id;
-    
+
+    //이름
     @Column(nullable = false)
     private String name;
-    
+
+    //학번
     @Column(nullable = false, unique = true)
     private String studentNumber;
 

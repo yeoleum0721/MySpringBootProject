@@ -12,12 +12,15 @@ import java.util.Optional;
 @Repository
 public interface StudentDetailRepository extends JpaRepository<StudentDetail, Long> {
     
+    //Student의 PK로 StudentDetail 정볼르 조회하는 Query Method
     Optional<StudentDetail> findByStudentId(Long studentId);
     
+    //Fetch Join을 사용하여 1개의 Query 만 생성이 되도록 처리함
     @Query("SELECT sd FROM StudentDetail sd JOIN FETCH sd.student WHERE sd.id = :id")
     Optional<StudentDetail> findByIdWithStudent(@Param("id") Long id);
     
+    //전화번호 중복 체크를 위한 메서드
     boolean existsByPhoneNumber(String phoneNumber);
-    
+    //이메일의 중복체크를 위한 메서드
     boolean existsByEmail(String email);
 }
