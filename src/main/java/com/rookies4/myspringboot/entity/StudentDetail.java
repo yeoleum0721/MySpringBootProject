@@ -41,6 +41,9 @@ public class StudentDetail {
 
     //student의 PK와 연결
     //JoinColumn은 FK에 해당하는 어노테이션
+    //FK를 가진 엔티티가 주인
+    // 1:1 관계 지연로딩
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_id",unique = true)
     private Student student;
 }
