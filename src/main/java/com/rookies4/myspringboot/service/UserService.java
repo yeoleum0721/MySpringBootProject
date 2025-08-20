@@ -62,10 +62,18 @@ public class UserService {
         existUser.setName(request.getName());
         return new UserDTO.UserResponse(existUser);
     }
+    //User 삭제
+    @Transactional
+    public void deleteUser(Long id){
+        UserEntity userEntity = getUserExist(id);
+        userRepository.delete(userEntity);
+    }
 
     //내부 Helper Method
     private UserEntity getUserExist(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new BusinessException("User Not Found", HttpStatus.NOT_FOUND));
     }
+
+
 }
