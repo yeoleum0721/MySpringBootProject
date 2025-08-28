@@ -36,4 +36,10 @@ public class Student {
             mappedBy = "student",
             cascade = CascadeType.ALL)
     private StudentDetail studentDetail;
+
+    //N:1 Student:Department 관계에서 N쪽에 해당하는 Student가 Owner
+    //department변수는 테이블의 FK와 매핑되는 필드
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="department_id")
+    private Department department;
 }

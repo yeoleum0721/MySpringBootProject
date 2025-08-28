@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-//StudentController 클래스
 @RestController
 @RequestMapping("/api/students")
 @RequiredArgsConstructor
