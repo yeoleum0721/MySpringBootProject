@@ -53,7 +53,19 @@ public class StudentService {
                         "Student", "student number", studentNumber));
         return StudentDTO.Response.fromEntity(student);
     }
+    // 페이징 처리된 특정 학과의 학생 조회
+    public Page<StudentDTO.Response> getStudentsByDepartmentId(Long departmentId, Pageable pageable) {
+        // Validate department exists
+        if (!departmentRepository.existsById(departmentId)) {
+            throw new BusinessException(ErrorCode.RESOURCE_NOT_FOUND,
+                    "Department", "id", departmentId);
+        }
 
+        Page<Student> students = studentRepository.findByDepartmentId(departmentId, pageable);
+        return students.map(StudentDTO.Response::fromEntity);
+    }
+
+    // 페이징 처리 없는 특정 학과의 학생 조회
     public List<StudentDTO.Response> getStudentsByDepartmentId(Long departmentId) {
         // Validate department exists
         if (!departmentRepository.existsById(departmentId)) {

@@ -7,6 +7,8 @@ import com.rookies4.myspringboot.exception.ErrorCode;
 import com.rookies4.myspringboot.repository.DepartmentRepository;
 import com.rookies4.myspringboot.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,12 +22,47 @@ public class DepartmentService {
     private final DepartmentRepository departmentRepository;
     private final StudentRepository studentRepository;
 
+//    public List<DepartmentDTO.SimpleResponse> getAllDepartments() {
+//        return departmentRepository.findAll()
+//                .stream()
+//                .map(DepartmentDTO.SimpleResponse::fromEntity)
+//                .toList();
+//    }
+
+    // 페이징 처리없는 모든 학과 조회 - 학생 정보 제외, 별도 카운트 조회
     public List<DepartmentDTO.SimpleResponse> getAllDepartments() {
-        return departmentRepository.findAll()
-                .stream()
-                .map(DepartmentDTO.SimpleResponse::fromEntity)
+        List<Department> departments = departmentRepository.findAll();
+
+        return departments.stream()
+                .map(department -> {
+                    // 학생 수만 별도로 조회하여 students 컬렉션에 접근하지 않음
+                    Long studentCount = studentRepository.countByDepartmentId(department.getId());
+                    return DepartmentDTO.SimpleResponse.builder()
+                            .id(department.getId())
+                            .name(department.getName())
+                            .code(department.getCode())
+                            .studentCount(studentCount)
+                            .build();
+                })
                 .toList();
     }
+
+    // 페이징 처리된 모든 학과 조회
+    public Page<DepartmentDTO.SimpleResponse> getAllDepartments(Pageable pageable) {
+        Page<Department> departments = departmentRepository.findAll(pageable);
+
+        return departments.map(department -> {
+            // 학생 수만 별도로 조회하여 students 컬렉션에 접근하지 않음
+            Long studentCount = studentRepository.countByDepartmentId(department.getId());
+            return DepartmentDTO.SimpleResponse.builder()
+                    .id(department.getId())
+                    .name(department.getName())
+                    .code(department.getCode())
+                    .studentCount(studentCount)
+                    .build();
+        });
+    }
+
 
     public DepartmentDTO.Response getDepartmentById(Long id) {
         Department department = departmentRepository.findByIdWithStudents(id)
